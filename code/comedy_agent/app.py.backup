@@ -1,0 +1,24 @@
+import os
+from dotenv import load_dotenv
+from src.ui.gradio_app import create_gradio_interface, initialize_agent
+import gradio as gr
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/")
+def main():
+    """Main entry point for the application."""
+    # Load environment variables
+    load_dotenv()
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
+    initialize_agent()
+    
+    # Create and launch the Gradio interface
+    demo = create_gradio_interface()
+    demo.launch(theme=gr.themes.Soft(), share=True)
+
+
+if __name__ == "__main__":
+    main()
